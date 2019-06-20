@@ -1,0 +1,276 @@
+<!-- Config Node -->
+<script type="text/x-red" data-template-name="github-credentials">
+    <div class="form-row">
+      <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="github.label.config.name"></span></label>
+      <input type="text" id="node-config-input-name">
+    </div>
+
+    <div class="form-row">
+      <label for="node-config-input-token"><i class="fa fa-key"></i> <span data-i18n="github.label.config.token"></span></label>
+      <input type="text" id="node-config-input-token">
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('github-credentials',{
+      defaults: {
+        name: {value:"", required: true}
+      },
+      category: 'config',
+      credentials: {
+        token: {type: "password", required: true}
+      },
+      label: function() {
+        return this.name;
+      },
+      exportable: false
+    });
+</script>
+
+<!-- REPO Node -->
+<script type="text/x-red" data-template-name="github-repo">
+    <div class="form-row">
+          <label for="node-input-github"><i class="fa fa-key"></i> <span data-i18n="github.label.github-id"></span></label>
+          <input type="text" id="node-input-github">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user"></i><span data-i18n="github.label.username"></span></label>
+        <input type="text" id="node-input-username" style="width:300px">
+        <input type="hidden" id="node-input-usernameType">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-repository"><i class="fa fa-book"></i><span data-i18n="github.label.repository"></span></label>
+        <input type="text" id="node-input-repository" style="width:300px">
+        <input type="hidden" id="node-input-repositoryType">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-wrench"></i>Action</label>
+        <select type="text" id="node-input-action" style="display: inline-block; width: 250px; vertical-align: top;">
+            <option value="show" outputs="1">Show info</option>
+            <option value="contents" outputs="1">Get contents</option>
+            <option value="read" outputs="1">Read file</option>
+            <option value="write" outputs="0">Write to file</option>
+            <option value="move" outputs="0">Move file</option>
+            <option value="remove" outputs="0">Remove file</option>
+            <option value="delete" outputs="0">Delete repo</option>
+            <option value="fork" outputs="0">Fork a repo</option>
+            <option value="listforks" outputs="1">List forks</option>
+            <option value="listbraches" outputs="1">Retrieve branches</option>
+            <option value="contributors" outputs="1">Contributors</option>
+        </select>
+        <div class="form-row" id="node-action-branch">
+            <label for="node-input-branch">&nbsp;</label>Branch:<input type="text" style="width:208px" id="node-input-branch">
+            <input type="hidden" id="node-input-branchType">
+        </div>
+        <div class="form-row" id="node-action-path">
+            <label for="node-input-path">&nbsp;</label>Path:<input type="text" style="width:208px" id="node-input-path">
+            <input type="hidden" id="node-input-pathType">
+        </div>
+        <div class="form-row" id="node-action-contents">
+            <label for="node-input-contents">&nbsp;</label>Contents:<input type="text" style="width:208px" id="node-input-contents">
+            <input type="hidden" id="node-input-contentsType">
+        </div>
+        <div class="form-row" id="node-action-pathto">
+            <label for="node-input-pathto">&nbsp;</label>Path to:<input type="text" style="width:208px" id="node-input-pathto">
+            <input type="hidden" id="node-input-pathtoType">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="github-repo">
+    <p>A simple node to create a github</p>
+</script>
+
+<script type="text/javascript">
+    function oneditprepare() {
+        var defaults = this;
+
+        $("#node-input-username").typedInput({default:'str', typeField: $("#node-input-usernameType"), types:['msg','flow','global','str']});
+        $("#node-input-repository").typedInput({default:'str', typeField: $("#node-input-repositoryType"), types:['msg','flow','global','str']});
+
+        $("#node-input-branch").typedInput({default:'str', typeField: $("#node-input-branchType"), types:['msg','flow','global','str']});
+        $("#node-input-path").typedInput({default:'str', typeField: $("#node-input-pathType"),types:['msg','flow','global','str']});
+        $("#node-input-contents").typedInput({default:'str', typeField: $("#node-input-contentsType"),types:['msg','flow','global','str']});
+        $("#node-input-pathto").typedInput({default:'str', typeField: $("#node-input-pathtoType"),types:['msg','flow','global','str']});
+
+        function hideExtraActions(){
+            $("#node-action-branch").hide();
+            $("#node-action-path").hide();
+            $("#node-action-contents").hide();
+            $("#node-action-pathto").hide();
+        }
+
+        $("#node-input-action").change(function(){
+            var so = $("#node-input-action option:selected").val();
+            hideExtraActions();
+            if(so=="show" || so=="delete" || so=="listbraches" || so=="fork" || so=="listforks" || so=="contributors"){
+            }else if (so=="read" || so=="contents" || so=="remove") {
+                $("#node-action-branch").show();
+                $("#node-action-path").show();
+            }else if (so == "write") {
+                $("#node-action-branch").show();
+                $("#node-action-path").show();
+                $("#node-action-contents").show();
+            }else if (so == "move") {
+              $("#node-action-branch").show();
+              $("#node-action-path").show();
+              $("#node-action-pathto").show();
+            }
+        });
+
+    }
+
+    function oneditsave(){
+        this.outputs = $("#node-input-action option:selected").attr("outputs");
+    }
+
+    RED.nodes.registerType('github-repo',{
+        defaults: {
+          github: { type:"github-credentials",required:true},
+          name: { value: ""},
+          username: { required:true},
+          usernameType: {value:"str"},
+          repository: { required:true},
+          repositoryType: {value:"str"},
+          action: { value: "show", required:true},
+          branch: { value:"master"},
+          branchType: {value:""},
+          path: {value:""},
+          pathType: {value:"str"},
+          pathto: {value:""},
+          pathtoType: {value:"str"},
+          contents: {value:"payload"},
+          contentsType: {value:"msg"},
+          outputs: {value: 1}
+        },
+        category: 'github',
+        color:"#787878",
+        inputs: 1,
+        outputs: 1,
+        icon: "github.png",
+        label: function() {
+            if(this.name) return this.name;
+            else {
+                return this.action?this.action + " " + this.username + " / " + this.repository: "Repo";
+            }
+        },
+        paletteLabel: function(){
+            return "github repo";
+        },
+        oneditprepare: oneditprepare,
+        oneditsave: oneditsave
+    });
+</script>
+
+<!-- REPO Node -->
+<script type="text/x-red" data-template-name="github-user">
+    <div class="form-row">
+        <label for="node-input-github"><i class="fa fa-key"></i> <span data-i18n="github.label.github-id"></span></label>
+        <input type="text" id="node-input-github">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-wrench"></i>Action</label>
+        <select type="text" id="node-input-action" style="display: inline-block; width: 250px; vertical-align: top;">
+            <option value="repos" outputs="1">All repos info</option>
+            <option value="orgs" outputs="1">List organizations</option>
+            <option value="gists" outputs="1">List gists</option>
+            <option value="notifications" outputs="1">User notifications</option>
+            <option value="show" outputs="1">Show user information</option>
+            <option value="userrepos" outputs="1">List public repos</option>
+            <option value="userstarred" outputs="1">List starred repos</option>
+            <option value="createrepo" outputs="1">Create a new repo</option>
+            <option value="orgrepos" outputs="1">List organization repos</option>
+            <option value="usergists" outputs="1">List all gists</option>
+        </select>
+    </div>
+    <div class="form-row" id="node-action-options">
+        <label for="node-input-options">&nbsp;</label>Options:<input type="text" id="node-input-options" style="width:208px">
+        <input type="hidden" id="node-input-optionsType">
+    </div>
+    <div class="form-row" id="node-action-username">
+        <label for="node-input-username">&nbsp;</label>Username:<input type="text" id="node-input-username" style="width:208px">
+        <input type="hidden" id="node-input-usernameType">
+    </div>
+    <div class="form-row" id="node-action-orgname">
+        <label for="node-input-orgname">&nbsp;</label>Org name:<input type="text" id="node-input-orgname" style="width:208px">
+        <input type="hidden" id="node-input-orgnameType">
+    </div>
+</script>
+
+
+<script type="text/x-red" data-help-name="github-user">
+    <p>A node to manipulate user infos and repos</p>
+</script>
+
+<script type="text/javascript">
+    function oneditprepare() {
+        var defaults = this;
+
+        $("#node-input-options").typedInput({default:'json', typeField: $("#node-input-optionsType"), types:['msg','flow','global','json']});
+        $("#node-input-username").typedInput({default:'str', typeField: $("#node-input-usernameType"),types:['msg','flow','global','str']});
+        $("#node-input-orgname").typedInput({default:'str', typeField: $("#node-input-orgnameType"),types:['msg','flow','global','str']});
+
+        function hideExtraActions(){
+            $("#node-action-options").hide();
+            $("#node-action-username").hide();
+            $("#node-action-orgname").hide();
+        }
+
+        $("#node-input-action").change(function(){
+            var so = $("#node-input-action option:selected").val();
+            hideExtraActions();
+            if(so=="repos"||so=="notifications"||so=="createrepo"){
+                $("#node-action-options").show();
+            }else if (so=="show"||so=="userrepos"||so=="userstarred"||so=="usergists") {
+                $("#node-action-username").show();
+            }else if (so=="orgrepos") {
+                $("#node-action-orgname").show();
+            }
+        });
+    }
+
+    function oneditsave(){
+        this.outputs = $("#node-input-action option:selected").attr("outputs");
+    }
+
+    RED.nodes.registerType('github-user',{
+        defaults: {
+            github: { type:"github-credentials",required:true},
+            name: { value: ""},
+            action: { value: "", required:true},
+            outputs: {value: 1},
+            options: {value: ""},
+            optionsType:{value: "json"},
+            username: { value: ""},
+            usernameType: {value:"str"},
+            orgname: {value:""},
+            orgnameType: {value:"str"}
+        },
+        category: 'github',
+        color:"#787878",
+        inputs: 1,
+        outputs: 1,
+        icon: "github.png",
+        label: function() {
+            return this.name||"User";
+        },
+        paletteLabel: function(){
+            return "github user";
+        },
+        oneditprepare: oneditprepare,
+        oneditsave: oneditsave
+    });
+</script>
