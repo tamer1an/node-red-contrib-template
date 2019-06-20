@@ -1,5 +1,5 @@
 <!-- Config Node -->
-<script type="text/x-red" data-template-name="github-credentials">
+<script type="text/x-red" data-template-name="template-credentials">
     <div class="form-row">
       <label for="node-config-input-name"><i class="fa fa-tag"></i> <span data-i18n="github.label.config.name"></span></label>
       <input type="text" id="node-config-input-name">
@@ -12,7 +12,7 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('github-credentials',{
+    RED.nodes.registerType('template-credentials',{
       defaults: {
         name: {value:"", required: true}
       },
@@ -28,7 +28,7 @@
 </script>
 
 <!-- REPO Node -->
-<script type="text/x-red" data-template-name="github-repo">
+<script type="text/x-red" data-template-name="template-node1">
     <div class="form-row">
           <label for="node-input-github"><i class="fa fa-key"></i> <span data-i18n="github.label.github-id"></span></label>
           <input type="text" id="node-input-github">
@@ -84,7 +84,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="github-repo">
+<script type="text/x-red" data-help-name="template-node1">
     <p>A simple node to create a github</p>
 </script>
 
@@ -131,9 +131,9 @@
         this.outputs = $("#node-input-action option:selected").attr("outputs");
     }
 
-    RED.nodes.registerType('github-repo',{
+    RED.nodes.registerType('template-node1',{
         defaults: {
-          github: { type:"github-credentials",required:true},
+          github: { type:"template-credentials",required:true},
           name: { value: ""},
           username: { required:true},
           usernameType: {value:"str"},
@@ -150,7 +150,7 @@
           contentsType: {value:"msg"},
           outputs: {value: 1}
         },
-        category: 'github',
+        category: 'template',
         color:"#787878",
         inputs: 1,
         outputs: 1,
@@ -162,7 +162,7 @@
             }
         },
         paletteLabel: function(){
-            return "github repo";
+            return "templateNode 1";
         },
         oneditprepare: oneditprepare,
         oneditsave: oneditsave
@@ -170,7 +170,7 @@
 </script>
 
 <!-- REPO Node -->
-<script type="text/x-red" data-template-name="github-user">
+<script type="text/x-red" data-template-name="template-node2">
     <div class="form-row">
         <label for="node-input-github"><i class="fa fa-key"></i> <span data-i18n="github.label.github-id"></span></label>
         <input type="text" id="node-input-github">
@@ -211,7 +211,7 @@
 </script>
 
 
-<script type="text/x-red" data-help-name="github-user">
+<script type="text/x-red" data-help-name="template-node2">
     <p>A node to manipulate user infos and repos</p>
 </script>
 
@@ -246,9 +246,9 @@
         this.outputs = $("#node-input-action option:selected").attr("outputs");
     }
 
-    RED.nodes.registerType('github-user',{
+    RED.nodes.registerType('template-node2',{
         defaults: {
-            github: { type:"github-credentials",required:true},
+            github: { type:"template-credentials",required:true},
             name: { value: ""},
             action: { value: "", required:true},
             outputs: {value: 1},
@@ -259,7 +259,7 @@
             orgname: {value:""},
             orgnameType: {value:"str"}
         },
-        category: 'github',
+        category: 'template',
         color:"#787878",
         inputs: 1,
         outputs: 1,
