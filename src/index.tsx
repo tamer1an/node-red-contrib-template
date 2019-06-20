@@ -1,7 +1,7 @@
-// file for testing github-api locally
+// file for testing template-api locally
 
 // @ts-ignore
-import Github from 'github-api';
+import template from 'template-api';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 

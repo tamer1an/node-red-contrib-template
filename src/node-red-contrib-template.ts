@@ -20,7 +20,6 @@ module.exports = function(RED: Red) {
   function TemplateNode1(n) {
     // @ts-ignore
     const node: any = this;
-
     RED.nodes.createNode(node, n);
     node.status({});
 

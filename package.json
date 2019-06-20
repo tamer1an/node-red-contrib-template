@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-template",
   "version": "0.1.5",
-  "description": "Github for node-red",
+  "description": "template for node-red",
   "main": "node-red-contrib-template.js",
   "devDependencies": {
     "@types/jest": "^24.0.14",
@@ -19,11 +19,11 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "github-api": "^3.2.0"
+    "template-api": "^3.2.0"
   },
   "node-red": {
     "nodes": {
-      "github": "node-red-contrib-template.js"
+      "template": "node-red-contrib-template.js"
     }
   },
   "scripts": {
@@ -35,24 +35,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tamer1an/node-red-contrib-template.git"
+    "url": "git+https://template.com/tamer1an/node-red-contrib-template.git"
   },
   "keywords": [
     "node-red",
-    "github",
+    "template",
     "red",
     "iot"
   ],
   "author": {
     "name": "Stefan W; Andrii Trybynenko",
     "email": "scaw.dev@gmail.com; tamerjlah@gmail.com",
-    "url": "https://github.com/tamer1an/"
+    "url": "https://template.com/tamer1an/"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tamer1an/node-red-contrib-template/issues"
+    "url": "https://template.com/tamer1an/node-red-contrib-template/issues"
   },
-  "homepage": "https://github.com/tamer1an/node-red-contrib-template#readme",
+  "homepage": "https://template.com/tamer1an/node-red-contrib-template#readme",
   "browserslist": [
     ">0.2%",
     "not dead",

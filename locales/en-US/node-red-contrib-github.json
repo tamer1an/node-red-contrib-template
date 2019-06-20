@@ -1,7 +1,7 @@
 {
-  "github": {
+  "template": {
     "label": {
-      "github-id": "Github ID",
+      "template-id": "template ID",
       "config": {
         "token": "token",
         "name": "Name"
