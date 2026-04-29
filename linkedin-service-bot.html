@@ -1,0 +1,139 @@
+<!-- Credentials Node -->
+<script type="text/x-red" data-template-name="linkedin-credentials">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-username"><i class="fa fa-user"></i> LinkedIn Email</label>
+        <input type="text" id="node-config-input-username" placeholder="Email">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-password">
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('linkedin-credentials', {
+        category: 'config',
+        defaults: {
+            name: {value: "", required: true},
+            username: {value: "", required: true}
+        },
+        credentials: {
+            password: {type: "password", required: true}
+        },
+        label: function () {
+            return this.name || "LinkedIn Credentials";
+        }
+    });
+</script>
+
+<!-- Message In Node -->
+<script type="text/x-red" data-template-name="linkedin-message-in">
+    <div class="form-row">
+        <label for="node-input-creds"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-creds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-pollInterval"><i class="fa fa-clock-o"></i> Poll Interval (s)</label>
+        <input type="number" id="node-input-pollInterval" placeholder="10">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="linkedin-message-in">
+    <p>Triggers when a new LinkedIn message is received.</p>
+    <p>Outputs <code>msg.payload</code> containing the message text, and <code>msg.conversationId</code>.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('linkedin-message-in', {
+        category: 'LinkedIn',
+        color: '#0077b5',
+        defaults: {
+            creds: {type: "linkedin-credentials", required: true},
+            name: {value: ""},
+            pollInterval: {value: 10, validate: RED.validators.number()}
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "bridge.svg",
+        label: function () {
+            return this.name || "LinkedIn In";
+        }
+    });
+</script>
+
+<!-- Message Out Node -->
+<script type="text/x-red" data-template-name="linkedin-message-out">
+    <div class="form-row">
+        <label for="node-input-creds"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-creds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="linkedin-message-out">
+    <p>Sends a LinkedIn message.</p>
+    <p>Requires <code>msg.payload</code> (the text) and <code>msg.conversationId</code> or <code>msg.profileId</code>.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('linkedin-message-out', {
+        category: 'LinkedIn',
+        color: '#0077b5',
+        defaults: {
+            creds: {type: "linkedin-credentials", required: true},
+            name: {value: ""}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "bridge.svg",
+        align: 'right',
+        label: function () {
+            return this.name || "LinkedIn Out";
+        }
+    });
+</script>
+
+<!-- Get Messages Node -->
+<script type="text/x-red" data-template-name="linkedin-get-messages">
+    <div class="form-row">
+        <label for="node-input-creds"><i class="fa fa-user"></i> Credentials</label>
+        <input type="text" id="node-input-creds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="linkedin-get-messages">
+    <p>Fetches recent LinkedIn messages.</p>
+    <p>Requires <code>msg.conversationId</code> and outputs messages to <code>msg.payload</code>.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('linkedin-get-messages', {
+        category: 'LinkedIn',
+        color: '#0077b5',
+        defaults: {
+            creds: {type: "linkedin-credentials", required: true},
+            name: {value: ""}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "bridge.svg",
+        label: function () {
+            return this.name || "LinkedIn Get Msgs";
+        }
+    });
+</script>
