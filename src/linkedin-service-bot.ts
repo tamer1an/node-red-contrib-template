@@ -1,5 +1,5 @@
 import { NodeProperties, Red } from 'node-red';
-import { Client } from 'linkedin-private-api';
+import { LinkedInClientManager } from './lib/linkedinClient';
 
 interface CredsNode extends NodeProperties {
   username: string;
@@ -17,12 +17,11 @@ module.exports = function (RED: Red) {
     this.username = n.username;
     this.password = this.credentials ? this.credentials.password : '';
     
+    // Initialize the client manager
+    this.clientManager = new LinkedInClientManager(this.username, this.password);
+    
     this.getClient = async () => {
-      if (!this.client) {
-        this.client = new Client();
-        await this.client.login.userPass({ username: this.username, password: this.password });
-      }
-      return this.client;
+      return this.clientManager.getClient();
     };
   }
 

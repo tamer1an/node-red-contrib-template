@@ -1,4 +1,13 @@
 .idea
+# Environment variables (credentials)
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+*.js
+
 # Logs
 logs
 *.log

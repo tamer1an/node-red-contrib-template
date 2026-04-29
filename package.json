@@ -4,6 +4,7 @@
   "description": "Node-RED nodes for interacting with LinkedIn messages",
   "main": "linkedin-service-bot.js",
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "@types/jest": "^24.0.14",
     "@types/node": "^11.13.4",
     "@types/node-red": "^0.17.3",
@@ -19,6 +20,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "linkedin-private-api": "^1.1.2"
   },
   "node-red": {
@@ -27,9 +29,12 @@
     }
   },
   "scripts": {
-    "build": "tsc ./src/linkedin-service-bot.ts --skipLibCheck --target es6 --module commonjs --outDir ./",
+    "build": "tsc --project tsconfig.json",
+    "build:cli": "tsc ./src/cli.ts ./src/lib/linkedinClient.ts ./src/lib/testRunner.ts --skipLibCheck --target es6 --module commonjs --outDir ./dist",
     "start": "react-scripts start",
     "test": "react-scripts test",
+    "test:local": "node -r ts-node/register ./src/cli.ts",
+    "test:local:build": "npm run build:cli && node ./dist/cli.js",
     "coverage": "npm test -- --coverage",
     "eject": "react-scripts eject"
   },

@@ -1,25 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "allowJs": true,
+    "target": "es2020",
+    "module": "commonjs",
+    "lib": ["es2020", "dom"],
+    "outDir": "./",
+    "rootDir": "./src",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "lib": [
-      "esnext",
-      "es2015.promise",
-      "dom"
-    ]
+    "sourceMap": true,
+    "removeComments": true,
+    "jsx": "preserve"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "public"]
 }
+
